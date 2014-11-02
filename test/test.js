@@ -28,9 +28,9 @@ describe("coffeekup compilation plugin", function () {
         thoughtpad = man.registerPlugins([app]);
 
         thoughtpad.subscribe("html-compile-complete", function *(contents) {
-            contents.should.equal('<div class="content">hello</div>');
+            contents.should.equal('<div class="content">hello there</div>');
         });
 
-        thoughtpad.notify("html-compile-request", { ext: "coffee", contents: "div '.content', ->\n\ttext @document.content", data: { document: { content: "hello" } } });
+        thoughtpad.notify("html-compile-request", { ext: "coffee", contents: "div '.content', ->\n\ttext @document.content", data: { document: { content: "hello there" } } });
     });
 });
