@@ -9,7 +9,7 @@ var init = function (thoughtpad) {
 compile = function *(obj) {
     if (obj.ext !== "coffee") return;
 
-    _thoughtpad.notify("html-compile-complete", coffee.render(obj.contents, obj.data));
+    yield _thoughtpad.notify("html-compile-complete", coffee.render(obj.contents, obj.data));
 };
 
 module.exports = {
