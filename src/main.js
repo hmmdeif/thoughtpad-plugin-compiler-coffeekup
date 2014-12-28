@@ -1,15 +1,18 @@
 var coffee = require('coffeekup'),
-    _thoughtpad;
+    extend = require('util')._extend;
 
 var init = function (thoughtpad) {
-    _thoughtpad = thoughtpad;
-    _thoughtpad.subscribe("html-compile-request", compile);
+    thoughtpad.subscribe("html-compile-request", compile);
 },
 
 compile = function *(obj) {
     if (obj.ext !== "coffee") return;
 
-    yield _thoughtpad.notify("html-compile-complete", coffee.render(obj.contents, obj.data));
+    if (obj.data) {
+        obj.thoughtpad.config = extend(obj.thoughtpad.config, obj.data);
+    }
+
+    yield obj.thoughtpad.notify("html-compile-complete", { contents: coffee.render(obj.contents, obj.thoughtpad.config), name: obj.name });
 };
 
 module.exports = {

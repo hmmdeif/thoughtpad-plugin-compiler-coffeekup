@@ -18,16 +18,17 @@ var thoughtpad = man.registerPlugins([coffeekup]);
 thoughtpad.subscribe("html-compile-complete", function (data) {
     console.log("HTML is returned here"); 
 });
-thoughtpad.notify("html-compile-request", { 
+yield thoughtpad.notify("html-compile-request", { 
     ext: "coffee", 
     contents: "your coffeekup code here", 
-    data: "your data here" 
+    data: {foo:'bar'},
+    name: "name of the file"
 });
 ```
 
 ## Variables
 
-Additional data can be used in the Coffeekup code that allows you to dynamically generate code and create simple logical constructs. This extra data can be passed into the `html-compile-request` notification object as `data`.
+Additional data can be used in the Coffeekup code that allows you to dynamically generate code and create simple logical constructs. This extra data can be passed into the `html-compile-request` notification using the `data` object. In addition, anything in the `thoughtpad.config` object will be passed too.
 
 ## Tests
 

@@ -30,14 +30,21 @@ describe("coffeekup compilation plugin", function () {
     });
 
     it("should compile coffeekup with content data", function (done) {
-        thoughtpad = man.registerPlugins([app]);
+        var contents = "",
+            name = "";
 
-        thoughtpad.subscribe("html-compile-complete", function *(contents) {
-            contents.should.equal('<div class="content">hello there</div>');
+        thoughtpad = man.registerPlugins([app]);
+        thoughtpad.config = { foo: 'bar' };
+
+        thoughtpad.subscribe("html-compile-complete", function *(res) {
+            contents = res.contents;
+            name = res.name;
         });
 
         co(function *() {
-            yield thoughtpad.notify("html-compile-request", { ext: "coffee", contents: "div '.content', ->\n\ttext @document.content", data: { document: { content: "hello there" } } });
+            yield thoughtpad.notify("html-compile-request", { ext: "coffee", contents: "div '.content', ->\n\ttext @document.content\n\ttext @foo", data: { document: { content: "hello there" } }, name: 'hello' });
+            contents.should.equal('<div class="content">hello therebar</div>');
+            name.should.equal('hello');
             done();
         })();
     });
