@@ -5,7 +5,7 @@ var should = require('should'),
     thoughtpad;
 
 describe("coffeekup compilation plugin", function () {
-    it("should register correctly to events", function () {
+    it("should register correctly to events", function (done) {
         thoughtpad = man.registerPlugins([app]);
 
         thoughtpad.subscribe("html-compile-complete", function *() {
@@ -14,10 +14,11 @@ describe("coffeekup compilation plugin", function () {
 
         co(function *() {
             yield thoughtpad.notify("html-compile-request", { ext: "coffee", contents: "" });
-        })();
+            done();
+        }).catch(done);
     });
 
-    it("should ignore anything other than coffeekup", function () {
+    it("should ignore anything other than coffeekup", function (done) {
         thoughtpad = man.registerPlugins([app]);
 
         thoughtpad.subscribe("html-compile-complete", function *() {
@@ -26,7 +27,8 @@ describe("coffeekup compilation plugin", function () {
 
         co(function *() {
             yield thoughtpad.notify("html-compile-request", { ext: "html" });
-        })();
+            done();
+        }).catch(done);
     });
 
     it("should compile coffeekup with content data", function (done) {
@@ -46,6 +48,6 @@ describe("coffeekup compilation plugin", function () {
             contents.should.equal('<div class="content">hello therebar</div>');
             name.should.equal('hello');
             done();
-        })();
+        }).catch(done);
     });
 });
